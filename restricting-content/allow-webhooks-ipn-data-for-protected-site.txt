@@ -1,0 +1,39 @@
+/**
+ * Allow Gateway Webhooks and IPN Data into a Protected Site
+ * This example is for the Stripe gateway. If you are using another gateway, you will need a separate list of IP addresses
+ * This recipe will only work with sites restricted by a UNIX password
+ *
+ * URL: https://www.paidmembershipspro.com/allow-gateway-webhooks-ipn-data-protected-site/
+ *
+ * title: Allow Gateway Webhooks and IPN Data into a Protected Site
+ * layout: snippet
+ * collection: restricting-content
+ * category: webhooks, IPN, payment-gateways, restriction, stripe
+ *
+ * You can add this recipe to your site by creating a custom plugin
+ * or using the Code Snippets plugin available for free in the WordPress repository.
+ * Read this companion article for step-by-step directions on either method.
+ * https://www.paidmembershipspro.com/create-a-plugin-for-pmpro-customizations/
+ */
+
+# Stripe Webhook IPs via https://stripe.com/docs/ips#webhook-notifications
+# v create a user/pass in this folder using htpasswd v
+AuthUserFile /var/www/vhosts/domain.com/conf/.htpasswd
+# ^^
+AuthType Basic
+AuthName "Authentication Required"
+Require valid-user
+Order allow,deny
+Allow from 3.18.12.63
+Allow from 3.130.192.231
+Allow from 13.235.14.237
+Allow from 13.235.122.149
+Allow from 18.211.135.69
+Allow from 35.154.171.200
+Allow from 52.15.183.38
+Allow from 54.88.130.119
+Allow from 54.88.130.237
+Allow from 54.187.174.169
+Allow from 54.187.205.235
+Allow from 54.187.216.72
+satisfy any
