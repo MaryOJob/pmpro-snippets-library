@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This recipe will add a percentage-based fee to the initial and recurring value when using Stripe
  * Set your percentage on line 21
@@ -8,14 +7,13 @@
  * layout: snippet
  * collection: checkout
  * category: stripe
- * url: https://www.paidmembershipspro.com/adjust-membership-pricing-by-payment-gateway/
+ * link: https://www.paidmembershipspro.com/adjust-membership-pricing-by-payment-gateway/
  * 
  * You can add this recipe to your site by creating a custom plugin
  * or using the Code Snippets plugin available for free in the WordPress repository.
  * Read this companion article for step-by-step directions on either method.
  * https://www.paidmembershipspro.com/create-a-plugin-for-pmpro-customizations/
  */
-
 function my_pmpro_increase_level_cost_by_percentage_for_gateway( $level ) {
 	// set your percentage here
 	$percentage = 4; // e.g. 4 = 4% increase
@@ -38,5 +36,4 @@ function my_pmpro_increase_level_cost_by_percentage_for_gateway( $level ) {
 	return $level;
 
 }
-
 add_filter( 'pmpro_checkout_level', 'my_pmpro_increase_level_cost_by_percentage_for_gateway' );
