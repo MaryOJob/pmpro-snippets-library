@@ -4,7 +4,7 @@
 * Create A Unique Email For Membership Renewals in Paid Memberships Pro
 * Make sure there is a folder /email/ in your plugin folder with the file named checkout_renewal.html
 * 
-* URL: https://www.paidmembershipspro.com/customize-membership-checkout-confirmation-email-membership-renewals/
+* link: https://www.paidmembershipspro.com/customize-membership-checkout-confirmation-email-membership-renewals/
 * 
 * title: create a unique email for renewals
 * layout: snippet
