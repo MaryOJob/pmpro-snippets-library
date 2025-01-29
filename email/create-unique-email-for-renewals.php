@@ -41,7 +41,13 @@ function my_pmpro_email_checkout_renewal( $email ) {
 	$email->subject = __( 'Thank you for your renewal.', 'paid-memberships-pro' );
 
 	// Update body.
-	$email->body = file_get_contents( dirname( __FILE__ ) . '/email/checkout_renewal.html' );
+	$email_file = dirname( __FILE__ ) . '/email/checkout_renewal.html';
+
+	if ( file_exists( $email_file ) ) {
+	$email->body = file_get_contents( $email_file );
+	} 
+	else { $email->body = __( 'Thank you for renewing your membership. We appreciate your continued support.', 'paid-memberships-pro' );
+	     }
 
 	// Replace data.
 	if ( is_string( $email->data ) ) {
