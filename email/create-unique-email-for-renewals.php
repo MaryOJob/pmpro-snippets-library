@@ -17,43 +17,44 @@
 * https://www.paidmembershipspro.com/create-a-plugin-for-pmpro-customizations/
 */
 
-function my_pmpro_email_checkout_renewal($email) {
-	$replace_data_again = false;
-
-	//only filter emails with invoices
-	if(empty($email->data['invoice_id']))
+function my_pmpro_email_checkout_renewal( $email ) {
+	// Only filter emails with invoices.
+	if ( empty( $email->data['invoice_id'] ) ) {
 		return $email;
+	}
 
-	//get order
-	$order = new MemberOrder($email->data['invoice_id']);
+	// Get order.
+	$order = new MemberOrder( $email->data['invoice_id'] );
 
-	//make sure we have a real order
-	if(empty($order) || empty($order->id))
+	// Make sure we have a real order.
+	if ( empty( $order ) || empty( $order->id ) ) {
 		return $email;
+	}
 
-	//check if there has been another order for the same user/level in the past
-	global $wpdb;
-	$is_renewal = $order->is_renewal();
-	if(!$is_renewal)
+	// Check if there has been another order for the same user/level in the past.
+	if ( ! $order->is_renewal() ) {
 		return $email;
+	}
 
-	//this is a renewal! let's do our stuff
-	//update subject
-	$email->subject = "Thank you for your renewal.";
-		
-	//update body
-	$email->body = file_get_contents(dirname(__FILE__) . "/email/checkout_renewal.html");
-		
-	//replace data
-	if(is_string($email->data))
-		$email->data = array("body"=>$email->data);			
-	if(is_array($email->data)) {
-		foreach($email->data as $key => $value) {
-			$email->body = str_replace("!!" . $key . "!!", $value, $email->body);
-		}	
+	// This is a renewal! Let's do our stuff.
+	// Update subject.
+	$email->subject = __( 'Thank you for your renewal.', 'paid-memberships-pro' );
+
+	// Update body.
+	$email->body = file_get_contents( dirname( __FILE__ ) . '/email/checkout_renewal.html' );
+
+	// Replace data.
+	if ( is_string( $email->data ) ) {
+		$email->data = array( 'body' => $email->data );
+	}
+
+	if ( is_array( $email->data ) ) {
+		foreach ( $email->data as $key => $value ) {
+			$email->body = str_replace( '!!' . $key . '!!', $value, $email->body );
+		}
 	}
 
 	return $email;
 }
 
-add_filter('pmpro_email_filter', 'my_pmpro_email_checkout_renewal', 20);
+add_filter( 'pmpro_email_filter', 'my_pmpro_email_checkout_renewal', 20 );
