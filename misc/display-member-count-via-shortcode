@@ -1,0 +1,68 @@
+<?php
+
+/**
+ * Display a Count of Members by Level and/or Status via Shortcode
+ * 
+ * title: Display a Count of Members by Level and/or Status via Shortcode
+ * layout: snippet
+ * collection: misc
+ * category: members
+ *
+ * You can add this recipe to your site by creating a custom plugin
+ * or using the Code Snippets plugin available for free in the WordPress repository.
+ * Read this companion article for step-by-step directions on either method.
+ * https://www.paidmembershipspro.com/create-a-plugin-for-pmpro-customizations/
+ */
+
+function pmpro_member_count_shortcode( $attrs = null ) {
+    global $wpdb;
+    $attrs = shortcode_atts(
+        array(
+            'status' => 'active',
+            'levels' => null,
+            'justnumber' => false,
+        ),
+        $attrs
+    );
+	
+    $statuses = array_map('trim', explode(',', $attrs['status']));
+
+    if (! is_array($statuses) && ! empty($attrs['status']) ) {
+
+        $statuses = array($attrs['status']);
+    }
+
+    $sql = "SELECT COUNT(*)
+            FROM {$wpdb->pmpro_memberships_users}
+            WHERE `status` IN ('" . implode("', '", $statuses) . "')";
+
+    if (! empty($attrs['levels'])) {
+        $sql .= "
+            AND `membership_id` = " . intval($attrs['levels']);
+    }
+
+    $member_count = $wpdb->get_var($sql);
+
+    if (!is_wp_error($member_count)) {
+
+        if (! empty($attrs['levels'])) {
+
+            $l = pmpro_getLevel($attrs['levels']);
+            if(!empty($attrs['justnumber']))
+                return $member_count;
+            else
+                return sprintf( __( "This site has %d %s members", "pmpromsc" ), $member_count, $l->name );
+
+        } else {
+            if(!empty($attrs['justnumber']))
+                return $member_count;
+            else
+                return sprintf( __( "This site has %d members", "pmpromsc" ), $member_count );
+        }
+    } else {
+
+        return sprintf( __( "Error while processing request: %s", "pmpromsc" ), $wpdb->print_error() );
+    }
+}
+
+add_shortcode('pmpro_member_count', 'pmpro_member_count_shortcode');
