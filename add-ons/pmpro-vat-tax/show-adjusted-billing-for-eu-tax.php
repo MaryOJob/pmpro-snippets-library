@@ -14,11 +14,11 @@
  * https://www.paidmembershipspro.com/create-a-plugin-for-pmpro-customizations/
  */
 
- function mypmpro_tax_update_script(){
+function mypmpro_tax_update_script(){
 
 	global $pmpro_levels, $pmpro_vat_by_country;
 	
-	$level = ( isset( $_REQUEST['level'] ) ? $pmpro_levels[$_REQUEST['level']] : '' );
+	$level = pmpro_getLevelAtCheckout();
 
 	?>
 	<script type="text/javascript">
@@ -29,7 +29,7 @@
 			
 			var ajax_url = '<?php echo admin_url( 'admin-ajax.php' ); ?>';
 
-			var country = jQuery( "#bcountry" ).val();
+			var country = jQuery( "#eucountry" ).val();
 
 			var vat_string = '';
 
@@ -39,7 +39,7 @@
 
 					var data = {
 						action: 'mypmpro_get_level_cost_text',
-						level_id: '<?php echo $_REQUEST['level']; ?>',
+						level_id: '<?php echo $level->id; ?>',
 						vat_rate: val,
 						discount_code: jQuery("#other_discount_code").val()
 					}
@@ -55,7 +55,7 @@
 				}
 			});
 
-			jQuery("body").on("change", "#bcountry", function(){
+			jQuery("body").on("change", "#eucountry", function(){
 				
 				var country = jQuery(this).val();
 				var vat_string = '';
@@ -66,7 +66,7 @@
 
 						var data = {
 							action: 'mypmpro_get_level_cost_text',
-							level_id: '<?php echo $_REQUEST['level']; ?>',
+							level_id: '<?php echo $level->id; ?>',
 							vat_rate: val,
 							discount_code: jQuery("#other_discount_code").val()
 						}
